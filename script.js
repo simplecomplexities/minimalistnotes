@@ -10,6 +10,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const backupButton = document.getElementById('backupButton');
     const toggleSidebarButton = document.getElementById('toggleSidebar');
     const sidebar = document.getElementById('sidebar');
+    const newNoteButton = document.getElementById('newNoteButton');
+
+    // Event listener for the New Note button
+    newNoteButton.addEventListener('click', function() {
+        // Clear form fields to prepare for a new note
+        noteTitle.value = '';
+        noteContent.value = '';
+        noteCategory.value = '';
+        noteStatus.value = 'Published'; // or whichever default status you prefer
+    });
 
      // Event listener to toggle the sidebar
      toggleSidebarButton.addEventListener('click', function() {
