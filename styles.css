@@ -16,6 +16,11 @@ h2{
   color: #f0f0f0;
 }
 
+#newNoteButton{
+  margin:0px auto;
+  font-size:11px;
+}
+
 h3{
   color: #777;
   font-weight: normal;
@@ -27,12 +32,15 @@ h3{
 
 #toggleSidebar {
   position: absolute;
+  margin: 0 0 40px 0;
   top: 10px;
   left: 10px;
   z-index: 1000;
+  font-size: 11px;
 }
 
 #sidebar {
+  clear:both;
   width: 250px;
   padding: 30px 0 0 0;
   height: 100vh;
@@ -114,7 +122,7 @@ button {
   cursor: pointer;
   float:left;
   font-size: 16px;
-  font-family: 'Lucida Console', monospace;
+  font-family: monospace;
 }
 
 button:hover{
