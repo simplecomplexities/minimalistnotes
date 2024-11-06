@@ -10,6 +10,12 @@ messages for the toggle bar, and Categories are automatically generated when you
 type one, automatically deleting the categories when you delete all notes
 related to it.
 
+## Pic
+
+![Minimalist Notes Screenshot](MinimalistNotesPic.png)
+
+
+
 ## Features
 
 - Add and edit notes
