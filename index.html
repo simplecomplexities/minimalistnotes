@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist Notes</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <button id="toggleSidebar" style="margin: 0 0 40px 0;">Toggle Sidebar</button>
+
+    <table>
+        <tr>
+          <td id="sidebar" width="320" valign="top">
+            <h2>Notes</h2>
+            <ul id="notesContainer"></ul>
+          </td>
+        <td>
+          <div id="formelements">
+            <input type="text" id="noteTitle" placeholder="Note Title">
+            <input type="text" id="noteCategory" placeholder="Category (e.g., Tag)">
+            <select id="noteStatus">
+                <option value="Published">Published</option>
+                <option value="Written">Written</option>
+                <option value="Planned">Planned</option>
+            </select>
+            <textarea id="noteContent" placeholder="Write your note" cols="150" rows="20"></textarea>
+
+            <button id="saveButton">Save Note</button>
+
+            <button id="backupButton">Backup Notes</button>
+            <input type="file" id="restoreInput" style="display: none;">
+            <button id="restoreButton">Restore Notes</button>
+          </div>
+          </td></tr>
+    </table>
+    <div id="memo">
+      <p></p>
+    </div>
+    <footer><p>If you create a note with the same title as an existing note, it will overwrite it. // Code by ChatGPT / Code edits & Design Kat</p></footer>"
+    <script src="script.js"></script>
+
+</body>
+</html>
