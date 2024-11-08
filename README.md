@@ -12,7 +12,7 @@ related to it.
 
 ## Pic
 
-![Minimalist Notes Screenshot](MinimalistNotesPic11.png)
+![Minimalist Notes Screenshot](MinimalistNotesPicv11.png)
 
 
 
