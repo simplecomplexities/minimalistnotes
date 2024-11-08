@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
     <button id="toggleSidebar">Toggle Sidebar</button>
+
     <table>
         <tr>
           <td id="sidebar" width="320" valign="top">
@@ -18,13 +20,17 @@
           </td>
         <td>
           <div id="formelements">
+
             <input type="text" id="noteTitle" placeholder="Note Title">
-            <input type="text" id="noteCategory" placeholder="Category (e.g., Tag)">
+            <input type="text" id="noteCategory" placeholder="Category,">
+            <input type="text" id="noteTags" placeholder="Tags,">
+
             <select id="noteStatus">
                 <option value="Published">Published</option>
                 <option value="Written">Written</option>
                 <option value="Planned">Planned</option>
             </select>
+
             <textarea id="noteContent" placeholder="Write your note" cols="150" rows="20"></textarea>
 
             <button id="saveButton">Save Note</button>
@@ -33,9 +39,10 @@
             <input type="file" id="restoreInput" style="display: none;">
             <button id="restoreButton">Restore Notes</button>
           </div>
-        </td></tr>
+          </td></tr>
     </table>
-    <footer><p>If you create a note with the same title as an existing note, it will overwrite it. // Code by ChatGPT / Code edits & Design Kat</p></footer>"
+    <footer><p>Code by ChatGPT / Code edits & Design Kat</p></footer>"
     <script src="script.js"></script>
+
 </body>
 </html>
