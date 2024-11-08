@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const noteContent = document.getElementById('noteContent');
     const noteCategory = document.getElementById('noteCategory');
     const noteStatus = document.getElementById('noteStatus');
+    const noteTags = document.getElementById('noteTags');
     const notesContainer = document.getElementById('notesContainer');
     const restoreButton = document.getElementById('restoreButton');
     const restoreInput = document.getElementById('restoreInput');
@@ -12,6 +13,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const sidebar = document.getElementById('sidebar');
     const newNoteButton = document.getElementById('newNoteButton');
 
+    // Autosave variables
+    let autosaveTimeout = null;
+    const AUTO_SAVE_DELAY = 10000;  // Time in milliseconds (2 seconds) to wait after user stops typing
+
+    // Autosave function
+    function autosave() {
+        clearTimeout(autosaveTimeout);
+        autosaveTimeout = setTimeout(saveNote, AUTO_SAVE_DELAY);
+    }
+
+    // Event listener for input changes
+    noteTitle.addEventListener('input', autosave);
+    noteContent.addEventListener('input', autosave);
+    noteCategory.addEventListener('input', autosave);
+    noteStatus.addEventListener('input', autosave);
+
     // Event listener for the New Note button
     newNoteButton.addEventListener('click', function() {
         // Clear form fields to prepare for a new note
@@ -19,45 +36,52 @@ document.addEventListener('DOMContentLoaded', function() {
         noteContent.value = '';
         noteCategory.value = '';
         noteStatus.value = 'Published'; // or whichever default status you prefer
+        noteTags.value = ''; // Reset tags field
     });
 
-     // Event listener to toggle the sidebar
-     toggleSidebarButton.addEventListener('click', function() {
-         sidebar.classList.toggle('closed');
-     })
+    // Event listener to toggle the sidebar
+    toggleSidebarButton.addEventListener('click', function() {
+        sidebar.classList.toggle('closed');
+    });
 
     saveButton.addEventListener('click', saveNote);
 
+    // Save note function
     function saveNote() {
         const title = noteTitle.value.trim();
         const content = noteContent.value.trim();
         const category = noteCategory.value.trim();
         const status = noteStatus.value;
+        const tags = noteTags.value.split(',').map(tag => tag.trim()); // Process tags
 
         if (title && content && category) {
             let notes = JSON.parse(localStorage.getItem('notes')) || [];
 
+            // Check if the note already exists
             const existingNote = notes.find(note => note.title === title);
 
             if (existingNote) {
+                // Update existing note
                 existingNote.content = content;
                 existingNote.category = category;
                 existingNote.status = status;
+                existingNote.tags = tags; // Update tags
             } else {
-                notes.push({ title, content, category, status });
+                // Create a new note
+                notes.push({ title, content, category, status, tags });
             }
 
+            // Save updated notes to localStorage
             localStorage.setItem('notes', JSON.stringify(notes));
-            noteTitle.value = '';
-            noteContent.value = '';
-            noteCategory.value = '';
-            noteStatus.value = 'Published';
+
+            // Optionally: Call loadNotes() to refresh the notes list after save
             loadNotes();
         } else {
             alert('Please enter a title, content, and category for the note.');
         }
     }
 
+    // Load notes from localStorage
     function loadNotes() {
         notesContainer.innerHTML = ''; // Clear previous notes
         let notes = JSON.parse(localStorage.getItem('notes')) || [];
@@ -97,13 +121,28 @@ document.addEventListener('DOMContentLoaded', function() {
                 noteElement.appendChild(titleLink);
 
                 const categoryElement = document.createElement('span');
-                categoryElement.textContent = ` (${note.category}) - ${note.status}`;
+                categoryElement.textContent = ` ${note.status}`;
+                categoryElement.style.color = "yellow";
                 noteElement.appendChild(categoryElement);
+
+                // Display tags for each note
+                if (note.tags && note.tags.length > 0) {
+                    const tagsElement = document.createElement('span');
+                    note.tags.forEach(tag => {
+                        const tagElement = document.createElement('span');
+                        tagElement.textContent = tag;
+                        tagElement.classList.add('tag');
+                        tagElement.style.color = "orange";
+                        tagElement.addEventListener('click', () => filterByTag(tag));
+                        tagsElement.appendChild(tagElement);
+                    });
+                    noteElement.appendChild(tagsElement);
+                }
 
                 // Create delete link
                 const deleteLink = document.createElement('a');
                 deleteLink.href = '#';
-                deleteLink.textContent = 'Delete';
+                deleteLink.textContent = '[–]';
                 deleteLink.style.color = 'red';
                 deleteLink.style.marginLeft = '10px';
                 deleteLink.addEventListener('click', (e) => {
@@ -117,13 +156,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Load content into the form for editing
     function loadNoteContent(note) {
         noteTitle.value = note.title;
         noteContent.value = note.content;
         noteCategory.value = note.category;
         noteStatus.value = note.status;
+        noteTags.value = note.tags.join(', '); // Display tags when editing
     }
 
+    // Delete note
     function deleteNote(title) {
         if (confirm("Are you sure you want to delete this note?")) {
             let notes = JSON.parse(localStorage.getItem('notes')) || [];
@@ -136,43 +178,29 @@ document.addEventListener('DOMContentLoaded', function() {
     // Backup Notes
     backupButton.addEventListener('click', () => {
         const notes = JSON.parse(localStorage.getItem('notes')) || [];
-        const blob = new Blob([JSON.stringify(notes, null, 2)], { type: 'application/json' });
+        const blob = new Blob([JSON.stringify(notes)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
-
         const a = document.createElement('a');
         a.href = url;
         a.download = 'notes_backup.json';
         a.click();
-
-        URL.revokeObjectURL(url); // Clean up
+        URL.revokeObjectURL(url);
     });
 
     // Restore Notes
-    restoreButton.addEventListener('click', () => {
-        restoreInput.click(); // Trigger file input
-    });
-
-    restoreInput.addEventListener('change', (event) => {
-        const file = event.target.files[0];
+    restoreInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const importedNotes = JSON.parse(e.target.result);
-                    if (Array.isArray(importedNotes)) {
-                        localStorage.setItem('notes', JSON.stringify(importedNotes));
-                        loadNotes();
-                        alert('Notes restored successfully!');
-                    } else {
-                        alert('Invalid backup file.');
-                    }
-                } catch (error) {
-                    alert('Failed to parse backup file.');
-                }
+            reader.onload = function(event) {
+                const notes = JSON.parse(event.target.result);
+                localStorage.setItem('notes', JSON.stringify(notes)); // Save restored notes
+                loadNotes(); // Reload notes after restoration
             };
             reader.readAsText(file);
         }
     });
 
-    loadNotes(); // Initially load notes
+    // Initial load of notes
+    loadNotes();
 });
