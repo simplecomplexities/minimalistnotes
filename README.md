@@ -19,9 +19,11 @@ related to it.
 ## Features
 
 - Add and edit notes
-- Categorize notes by tags
+- Categories
+- Tags
 - Backup and restore notes
 - Sidebar toggle
+- Autosave
 
 ## Installation
 
@@ -30,7 +32,7 @@ related to it.
 
 ## Usage
 
-1. Use the input fields to add a title, category, and content to your note.
+1. Use the input fields to add a title, category, tags and content to your note.
 2. Save your note using the "Save Note" button.
 3. View and delete notes by category in the sidebar.
 
