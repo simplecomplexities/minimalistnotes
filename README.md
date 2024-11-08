@@ -46,8 +46,7 @@ and design code. We argued. We solved problems.
 ## Please Note
 
 This is a very simple note system, so a few things to consider and remember:
-- If you create a note of the same name as an existing note, it will overwrite
-the existing one with your ned content.
+- Autosave start saving about 10 seconds in, and will pester you at first to add a title, category and content.
 - If you write a bunch of stuff and don't hit save and refresh, it will
 overwrite the note with a blank page.
 - Because the notes are locally stored in your browser, you need to periodically
